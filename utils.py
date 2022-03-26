@@ -1,37 +1,59 @@
-def id_mapper(df, col_name):
+from sklearn.pipeline import Pipeline
+from sklearn.metrics import classification_report
+from sklearn.model_selection import GridSearchCV
+import pickle
+
+
+def build_model(classifier, param_grid):
     '''
     INPUT:
-    df - DataFrame
-    col_name - string, column name to be mapped
+    classifier - object, classifier
+    parameters - dict, parameters for GridSearchCV
 
     OUTPUT:
-    encoded_list - list, new numerical values for the column: [1, 2, 3, ...]
+    pipeline - machine learning pipeline, which will take in features as input
+               and output classification results
     '''
 
-    coded_dict = dict()
-    counter = 1
-    encoded_list = []
-    
-    for val in df[col_name]:
-        if val not in coded_dict:
-            coded_dict[val] = counter
-            counter+=1
-        
-        encoded_list.append(coded_dict[val])
-    return encoded_list
+    # text processing and model pipeline
+    pipeline = Pipeline([
+        ('clf', classifier)
+    ])
+
+    # create gridsearch object and return as final model pipeline
+    pipeline = GridSearchCV(pipeline, param_grid=param_grid)
+
+    return pipeline
 
 
-def encode_id(df, old_col_name, new_col_name):
+def evaluate_model(model, X_test, Y_test):
     '''
     INPUT:
-    df - DataFrame
-    old_col_name - string, column name to be mapped
-    new_col_name - string, column name for new values
-
+    model - machine learning pipeline
+    X_test - array of features
+    Y_test - array of predictions
     OUTPUT:
-    new_df - DataFrame, with added new column new_col_name and removed old_col_name
+    Reports:
+        f1 score, precision, recall for each output of the dataset
+        accuracy of the model
+        the best parameters found using GridSearch
     '''
 
-    df[new_col_name] = id_mapper(df, old_col_name)
-    new_df = df.drop(columns=old_col_name)
-    return new_df
+    y_pred = model.predict(X_test)
+    print(classification_report(Y_test, y_pred))
+    #print(f'Accuracy: {(y_pred==Y_test).mean()}')
+    print("\nBest Parameters:", model.best_params_)
+
+
+def save_model(model, model_filepath):
+    '''
+    INPUT:
+    model - machine learning pipeline
+    model_filepath - the filepath of the pickle file to save the model to
+    OUTPUT:
+    Saves the model as a pickle file
+    '''
+
+    with open(model_filepath, 'wb') as file:
+        pickle.dump(model, file)
+
