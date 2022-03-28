@@ -32,52 +32,50 @@
 
 <h1 class="text-center">How Starbucks offers effect customer transactions</h1>
 <p class="text-center">Analyzing customer response on Starbucks offer</p>
-<pre>{{offers[0]}}</pre>
-<pre>index: {{offers[0].index}}</pre>
 
-<div class="container bg-light p-5" style="border: 1px solid rgb(218, 218, 218);">
+<div class="container bg-light p-2" style="border: 1px solid rgb(218, 218, 218);">
     <form action="/go" method="get">
-        <select class="form-select form-select-sm" aria-label=".form-select-sm example">
-            <option selected value="0">No offer</option>
-            {%for offer in offers%}
-                <option value="{{offer.index}}">{{loop.index}}: {{offer['offer_type']}}</option>
-            {%endfor%}
-        </select>
-        <div class="row">
+        <div class="row p-2">
             <div class="col">
                 <div class="form-floating">
-                    <input type="number" min="10" max="120" class="form-control" id="customer_age" placeholder="Age">
+                    <input type="number" min="10" max="120" class="form-control" id="customer_age" name="customer_age" placeholder="Age">
                     <label for="customer_age">Age</label>
                 </div>
             </div>
             <div class="col">
                 <div class="form-floating">
-                    <input type="number" min="1900" max="2050" class="form-control" id="became_member_on" placeholder="Year became a member">
+                    <input type="number" min="1900" max="2050" class="form-control" id="became_member_on" name="became_member_on" placeholder="Year became a member">
                     <label for="became_member_on">Year became a member</label>
+                </div>
+            </div>
+        </div>
+        <div class="row p-2">
+            <div class="col">
+                <div class="form-floating">
+                    <select class="form-select" aria-label="Select gender" name="gender">
+                        <option value="no_gender" selected>Select gender</option>
+                        <option value="M">Male</option>
+                        <option value="F">Female</option>
+                        <option value="O">Other</option>
+                    </select>                
+                    <label for="gender">Gender</label>
                 </div>
             </div>
             <div class="col">
                 <div class="form-floating">
-                    <input type="text" class="form-control" id="gender" placeholder="Gender">
-                    <label for="gender">Gender</label>
+                    <input type="number" class="form-control" id="income" name="income" placeholder="Income">
+                    <label for="income">Income</label>
                 </div>
             </div>
         </div>
-        <div class="row">
-            <div class="col-lg-12 form-group-lg p3">
-                    <input type="text" class="form-control" name="query" placeholder="Enter a message to classify">
-                    <div class="col-lg-offset-5">
-                        <button type="submit" class="btn btn-success mt-5">Predict</button>
-                    </div>
+        <div class="row p-2">
+            <div class="col">
+                <button type="submit" class="btn btn-success">Predict transaction</button>
             </div>
         </div>
     </form>
-
-
-
-    {% block result %}
-    {% endblock %}
 </div>
+
 
 
 <div class="container">

@@ -1,27 +1,47 @@
 {% extends "home.html" %}
 {% block title %}Results{% endblock %}
 
-{% block result %}
+{% block content %}
+    <h1 class="text-center">Transaction prediction</h1>
+
     <hr />
     <h4 class="text-center">customer details:</h4>
-    <p class="text-center">Offer id: <i>{{offer_id}}</i></p>
-{% endblock %}
-
-{% block content %}
-    <h1 class="text-center">Result (will the customer make a transaction?):</h1>
-    <div class="container m-b-5">
-        <div class="row">
-            <div class="col">id</div>
-            <div class="col">transaction probability</div>
-        </div>
-    </div>
     <div class="container">
-        {%for id in result%}
         <div class="row">
-            <div class="col">{{id}}</div>
-            <div class="col">{{result[id]}}</div>
+            <div class="col">Age: <i>{{age}}</i></div>
+            <div class="col">Year became a member: <i>{{became_member_on}}</i></div>
+            <div class="col">Gender: <i>{{gender}}</i></div>
+            <div class="col">Income: <i>{{income}}</i></div>
         </div>
-        {%endfor%}
     </div>
+    <hr />
+
+    <table class="table table-hover">
+        <thead>
+            <tr>
+                <th scope="col">id</th>
+                <th scope="col">offer_type</th>
+                <th scope="col">reward</th>
+                <th scope="col">difficulty</th>
+                <th scope="col">duration</th>
+                <th scope="col">channels</th>
+                <th scope="col">transaction probability</th>
+            </tr>
+        </thead>
+        <tbody>
+            {%for id in result%}
+            <tr>
+                <th scope="row">{{id}}</th>
+                <td>{{result[id]['offer_type']}}</td>
+                <td>{{result[id]['reward']}}</td>
+                <td>{{result[id]['difficulty']}}</td>
+                <td>{{result[id]['duration']}}</td>
+                <td>{{result[id]['channels']}}</td>
+                <td>{{result[id]['prediction']}}</td>
+            </tr>
+            {%endfor%}
+
+        </tbody>
+    </table>
         
 {% endblock %}
