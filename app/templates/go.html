@@ -1,0 +1,12 @@
+{% extends "home.html" %}
+{% block title %}Results{% endblock %}
+
+{% block result %}
+    <hr />
+    <h4 class="text-center">Offer and customer details:</h4>
+    <p class="text-center">Offer id: <i>{{offer_id}}</i></p>
+{% endblock %}
+
+{% block content %}
+    <h1 class="text-center">Result (will the customer make a transaction?): {{classification_result}}</h1>
+{% endblock %}
