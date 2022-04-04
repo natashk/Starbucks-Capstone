@@ -29,7 +29,6 @@ def index():
     # create visuals
     graphs = [
         plots.offers_distribution(),
-        #plots.offers_distribution2(),
         plots.transactions_by_age(),
         plots.transactions_by_membership(),
         plots.transactions_by_income(),
@@ -57,10 +56,6 @@ def go():
     income = int(request.args.get('income', '0')) if request.args.get('income', '')!='' else 0
     gender = request.args.get('gender', 'no_gender')
 
-# reward	difficulty	duration
-# mobile	social	web	email
-# bogo	discount	informational
-# age	became_member_on	income	F	M	O	no_gender
     # use model to predict classification for query
     predictions = {}
     data_dict = {

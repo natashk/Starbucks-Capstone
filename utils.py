@@ -21,7 +21,7 @@ def build_model(classifier, param_grid):
     ])
 
     # create gridsearch object and return as final model pipeline
-    pipeline = GridSearchCV(pipeline, param_grid=param_grid)
+    pipeline = GridSearchCV(pipeline, param_grid=param_grid, scoring='f1')
 
     return pipeline
 

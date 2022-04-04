@@ -2,47 +2,34 @@ import pandas as pd
 import plotly.graph_objects as go
 
 
-# read in the json files
-offers0 = pd.read_json('../data/portfolio.json', orient='records', lines=True)
-users0 = pd.read_json('../data/profile.json', orient='records', lines=True)
-#transactions0 = pd.read_json('../data/transcript.json', orient='records', lines=True)
-
-#users = pd.read_csv('../data/users.csv')
-transactions = pd.read_csv('../data/transactions.csv')
-
-offers0['label'] = (offers0.index+1).astype(str) + '-' + offers0['offer_type']
-df = transactions.merge(offers0, how='left', left_on='offer', right_on='id')
-df = df.drop(columns=['id'])
-df = df.merge(users0, how='left', left_on='person', right_on='id')
-df = df.drop(columns=['id'])
-df['became_member_on'] = df['became_member_on'].apply(lambda x: int(str(x)[:4]))
+# read in the data
+df = pd.read_csv('../data/combined.csv')
 
 offer_received = df[df['event']=='offer received']
 transaction = df[df['event']=='transaction']
 offer_completed = df[df['event']=='offer completed']
 
 
-df2 = pd.read_csv('../data/clean_data.csv')
-
-
 def offers_distribution():
+    """
+    Distribution of received and completed offers
+    OUTPUT:
+        plot_data: dict, parameters for web plot 
+    """
     # extract data needed for visuals
-    offers = offer_received.groupby(by=['offer'])['person'].count().reset_index()
-    offers = offers.merge(offers0[['id','label']], how='left', left_on='offer', right_on='id')
-
-    offers_completed = offer_completed.groupby(by=['offer'])['person'].count().reset_index()
-    offers_completed = offers_completed.merge(offers0[['id','label']], how='left', left_on='offer', right_on='id')
+    received = offer_received.groupby(by=['offer_label'])['person'].count().reset_index()
+    completed = offer_completed.groupby(by=['offer_label'])['person'].count().reset_index()
 
     plot_data = {
         'data': [
             go.Bar(
-                x=offers['label'],
-                y=offers['person'],
+                x=received['offer_label'],
+                y=received['person'],
                 name='Received'
             ),
             go.Bar(
-                x=offers_completed['label'],
-                y=offers_completed['person'],
+                x=completed['offer_label'],
+                y=completed['person'],
                 name='Completed'
             )
         ],
@@ -54,62 +41,20 @@ def offers_distribution():
                 'categoryorder':'total descending'
             },
             'yaxis': {
-                'title': "Count of Offers sent",
-                'automargin': 1,
-            },
-            'height': 500,
-            'margin': {
-                't': 50,
-                'b': 150
+                'title': "Count of Offers sent"
             }
-
         }
     }
 
     return plot_data
 
-
-def offers_distribution2():
-    # extract data needed for visuals
-    offer_counts = df2.groupby(by=['offer'])['person'].count().reset_index()
-    offers = offers0.reset_index()
-    offers['index'] = offers['index'] + 1
-    offers['label'] = offers['index'].astype(str) + '-' + offers['offer_type']
-    offer_labels = offer_counts.merge(offers[['index','label']], how='left', left_on='offer', right_on='index')
-    offer_labels.loc[offer_labels['offer']==0,'label'] = 'No offer'
-
-
-    plot_data = {
-        'data': [
-            go.Bar(
-                x=offer_labels['label'],
-                y=offer_labels['person']
-            )
-        ],
-
-        'layout': {
-            'title': 'Distribution of Offers',
-            'xaxis': {
-                'title': "Offer",
-                'tickangle': 60,
-                'categoryorder':'total descending'
-            },
-            'yaxis': {
-                'title': "Count of Offers sent",
-                'automargin': 1,
-            },
-            'height': 500,
-            'margin': {
-                't': 50,
-                'b': 150
-            }
-
-        }
-    }
-
-    return plot_data
 
 def transactions_by_age():
+    """
+    Distribution of transactions by age and gender
+    OUTPUT:
+        plot_data: dict, parameters for web plot 
+    """
     plot_data = {
         'data': [
             go.Histogram(
@@ -132,15 +77,8 @@ def transactions_by_age():
                 'title': "Age"
             },
             'yaxis': {
-                'title': "Frequency",
-                'automargin': 1,
-            },
-            'height': 500,
-            'margin': {
-                't': 50,
-                'b': 150
+                'title': "Frequency"
             }
-
         }
     }
 
@@ -148,6 +86,11 @@ def transactions_by_age():
 
 
 def transactions_by_membership():
+    """
+    Distribution of transactions by membership year and gender
+    OUTPUT:
+        plot_data: dict, parameters for web plot 
+    """
     plot_data = {
         'data': [
             go.Histogram(
@@ -169,15 +112,8 @@ def transactions_by_membership():
                 'title': "Year Became a Member"
             },
             'yaxis': {
-                'title': "Frequency",
-                'automargin': 1,
-            },
-            'height': 500,
-            'margin': {
-                't': 50,
-                'b': 150
+                'title': "Frequency"
             }
-
         }
     }
 
@@ -185,6 +121,11 @@ def transactions_by_membership():
 
 
 def transactions_by_income():
+    """
+    Distribution of transactions by income and gender
+    OUTPUT:
+        plot_data: dict, parameters for web plot 
+    """
     plot_data = {
         'data': [
             go.Histogram(
@@ -207,15 +148,8 @@ def transactions_by_income():
                 'title': "Income"
             },
             'yaxis': {
-                'title': "Frequency",
-                'automargin': 1,
-            },
-            'height': 500,
-            'margin': {
-                't': 50,
-                'b': 150
+                'title': "Frequency"
             }
-
         }
     }
 
@@ -223,6 +157,11 @@ def transactions_by_income():
 
 
 def income_age():
+    """
+    Correlation between income and age
+    OUTPUT:
+        plot_data: dict, parameters for web plot 
+    """
     plot_data = {
         'data': [
             go.Scatter(
@@ -253,15 +192,8 @@ def income_age():
                 'title': "Income"
             },
             'yaxis': {
-                'title': "Age",
-                'automargin': 1,
-            },
-            'height': 500,
-            'margin': {
-                't': 50,
-                'b': 150
+                'title': "Age"
             }
-
         }
     }
 
