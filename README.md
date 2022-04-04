@@ -17,7 +17,7 @@ The data is contained in three files:
 
 In this project I modified the transactions data set the way that each record would represent all the data about specific offer for specific customer. So I had to combine a few records in one for each customer/offer combination. Then I combined data from all 3 data sets.  
 After cleaning the data I created a machine learning model for predicting customer transaction based on demographics and offer.  
-As a result of the project I created a web app, which uses machine learning model to predict customer response to different offers depending on customer demographics.
+As a result of the project I created a web app, which uses machine learning model to predict customer response to different offers depending on customer demographics.  
 I deployed the app on Heroku: https://nat-sb-offers.herokuapp.com/
 
 
@@ -78,5 +78,5 @@ I deployed the app on Heroku: https://nat-sb-offers.herokuapp.com/
 
 ### Acknowledgments
 
-https://stackoverflow.com/
+https://stackoverflow.com/  
 https://seaborn.pydata.org/api.html
